@@ -99,9 +99,10 @@ class _ClockState extends State<Clock> {
   }
 }
 
-// Fixed range of 4 rows per column
+/// Fixed range of 4 rows per column
 List fixedRows = Iterable<int>.generate(4).toList();
 
+/// Column to represent a binary integer. 
 class ClockColumn extends StatelessWidget {
   String binaryInteger;
   String title;
@@ -174,7 +175,7 @@ class ClockColumn extends StatelessWidget {
   }
 }
 
-// Utility class to access values as binary integers
+/// Utility class to access values as binary integers
 class BinaryTime {
   List<String> binaryIntegers;
 
