@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/services.dart' show SystemChrome, DeviceOrientation;
+import 'package:intl/intl.dart' show DateFormat;
 
 void main() {
   SystemChrome.setPreferredOrientations([
@@ -100,9 +100,9 @@ class _ClockState extends State<Clock> {
 }
 
 /// Fixed range of 4 rows per column
-List fixedRows = Iterable<int>.generate(4).toList();
+// List fixedRows = Iterable<int>.generate(4).toList();
 
-/// Column to represent a binary integer. 
+/// Column to represent a binary integer.
 class ClockColumn extends StatelessWidget {
   String binaryInteger;
   String title;
@@ -127,8 +127,11 @@ class ClockColumn extends StatelessWidget {
             ),
           )
         ],
-        ...fixedRows.map((idx) {
-          bool isActive = bits[idx] == '1';
+        ...bits.asMap().entries.map((entry) {
+          int idx = entry.key;
+          String bit = entry.value;
+
+          bool isActive = bit == '1';
           int binaryCellValue = pow(2, 3 - idx);
 
           return AnimatedContainer(
@@ -150,9 +153,10 @@ class ClockColumn extends StatelessWidget {
                   ? Text(
                       binaryCellValue.toString(),
                       style: TextStyle(
-                          color: Colors.black.withOpacity(0.2),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700),
+                        color: Colors.black.withOpacity(0.2),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
                     )
                   : Container(),
             ),
@@ -181,9 +185,7 @@ class BinaryTime {
 
   BinaryTime() {
     DateTime now = DateTime.now();
-    String hhmmss = DateFormat("Hms").format(now).split(':').join('');
-
-    print(hhmmss);
+    String hhmmss = DateFormat("Hms").format(now).replaceAll(':', '');
 
     binaryIntegers = hhmmss
         .split('')
